@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: '0 7 * * 1'
 jobs:
-  test-older-python:
+  test-python-310-to-312:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,8 +28,9 @@ jobs:
         run: uv sync --all-extras --dev
       - name: Test with pytest
         run: |
-          uv run tox -e 'py-2.6,py-2.x'
-  test:
+          uv run tox -e 'py-pd26,py-pd29,py-pd212,py-pd2x'
+
+  test-python-313:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -50,4 +51,27 @@ jobs:
         run: uv sync --all-extras --dev
       - name: Test with pytest
         run: |
-          uv run tox -e 'py-2.x'
+          uv run tox -e 'py-pd29,py-pd212,py-pd2x'
+
+  test-python-314:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.14"
+
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the dependencies
+        run: uv sync --all-extras --dev
+      - name: Test with pytest
+        run: |
+          uv run tox -e 'py-pd212,py-pd2x'

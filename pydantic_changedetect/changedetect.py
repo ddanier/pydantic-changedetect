@@ -1,6 +1,7 @@
 import datetime
 import decimal
 import warnings
+from collections.abc import Callable
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -15,7 +16,7 @@ from typing import (
 
 import pydantic
 
-from ._compat import PYDANTIC_GE_V2_7
+from ._compat import PYDANTIC_GE_V2_7, PYDANTIC_GE_V2_11, PYDANTIC_GE_V2_13
 from .utils import is_pydantic_change_detect_annotation
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -448,7 +449,187 @@ class ChangeDetectionMixin(pydantic.BaseModel):
         object.__setattr__(clone, "model_changed_markers", self.model_changed_markers.copy())
         return clone
 
-    if PYDANTIC_GE_V2_7:
+    if PYDANTIC_GE_V2_13:
+        def model_dump(  # pyright: ignore [reportRedeclaration]
+            self,
+            *,
+            mode: Literal['json', 'python'] | str = 'python',
+            include: "IncEx | None" = None,
+            exclude: "IncEx | None" = None,
+            context: Dict[str, Any] | None = None,  # Available since 2.7
+            by_alias: bool = False,
+            exclude_unset: bool = False,
+            exclude_defaults: bool = False,
+            exclude_none: bool = False,
+            exclude_computed_fields: bool = False,  # Available since 2.11
+            exclude_unchanged: bool = False,
+            round_trip: bool = False,
+            warnings: bool = True,
+            fallback: Callable[[Any], Any] | None = None,  # Available since 2.11
+            serialize_as_any: bool = False,  # Available since 2.7
+            polymorphic_serialization: bool | None = None,  # Available since 2.13
+        ) -> Dict[str, Any]:
+            """
+            Generate a dictionary representation of the model, optionally specifying
+            which fields to include or exclude.
+
+            Extends normal pydantic method to also allow to use `exclude_unchanged`.
+            """
+
+            return super().model_dump(
+                **self._get_changed_export_includes(
+                    mode=mode,
+                    include=include,
+                    exclude=exclude,
+                    context=context,
+                    by_alias=by_alias,
+                    exclude_unset=exclude_unset,
+                    exclude_defaults=exclude_defaults,
+                    exclude_none=exclude_none,
+                    exclude_computed_fields=exclude_computed_fields,
+                    exclude_unchanged=exclude_unchanged,
+                    round_trip=round_trip,
+                    warnings=warnings,
+                    fallback=fallback,
+                    serialize_as_any=serialize_as_any,
+                    polymorphic_serialization=polymorphic_serialization,
+                ),
+            )
+
+        def model_dump_json(  # pyright: ignore [reportRedeclaration]
+            self,
+            *,
+            indent: int | None = None,
+            include: "IncEx | None" = None,
+            exclude: "IncEx | None" = None,
+            context: Dict[str, Any] | None = None,  # Available since 2.7
+            by_alias: bool = False,
+            exclude_unset: bool = False,
+            exclude_defaults: bool = False,
+            exclude_none: bool = False,
+            exclude_computed_fields: bool = False,  # Available since 2.11
+            exclude_unchanged: bool = False,
+            round_trip: bool = False,
+            warnings: bool = True,
+            fallback: Callable[[Any], Any] | None = None,  # Available since 2.11
+            serialize_as_any: bool = False,  # Available since 2.7
+            polymorphic_serialization: bool | None = None,  # Available since 2.13
+        ) -> str:
+            """
+            Generates a JSON representation of the model using Pydantic's `to_json`
+            method.
+
+            Extends normal pydantic method to also allow to use `exclude_unchanged`.
+            """
+
+            return super().model_dump_json(
+                **self._get_changed_export_includes(
+                    indent=indent,
+                    include=include,
+                    exclude=exclude,
+                    context=context,
+                    by_alias=by_alias,
+                    exclude_unset=exclude_unset,
+                    exclude_defaults=exclude_defaults,
+                    exclude_none=exclude_none,
+                    exclude_computed_fields=exclude_computed_fields,
+                    exclude_unchanged=exclude_unchanged,
+                    round_trip=round_trip,
+                    warnings=warnings,
+                    fallback=fallback,
+                    serialize_as_any=serialize_as_any,
+                    polymorphic_serialization=polymorphic_serialization,
+                ),
+            )
+    elif PYDANTIC_GE_V2_11:  # Version 2.11.0 < 2.12.0
+        def model_dump(  # pyright: ignore [reportRedeclaration]
+            self,
+            *,
+            mode: Literal['json', 'python'] | str = 'python',
+            include: "IncEx | None" = None,
+            exclude: "IncEx | None" = None,
+            context: Dict[str, Any] | None = None,  # Available since 2.7
+            by_alias: bool = False,
+            exclude_unset: bool = False,
+            exclude_defaults: bool = False,
+            exclude_none: bool = False,
+            exclude_computed_fields: bool = False,  # Available since 2.11
+            exclude_unchanged: bool = False,
+            round_trip: bool = False,
+            warnings: bool = True,
+            fallback: Callable[[Any], Any] | None = None,  # Available since 2.11
+            serialize_as_any: bool = False,  # Available since 2.7
+        ) -> Dict[str, Any]:
+            """
+            Generate a dictionary representation of the model, optionally specifying
+            which fields to include or exclude.
+
+            Extends normal pydantic method to also allow to use `exclude_unchanged`.
+            """
+
+            return super().model_dump(
+                **self._get_changed_export_includes(
+                    mode=mode,
+                    include=include,
+                    exclude=exclude,
+                    context=context,
+                    by_alias=by_alias,
+                    exclude_unset=exclude_unset,
+                    exclude_defaults=exclude_defaults,
+                    exclude_none=exclude_none,
+                    exclude_computed_fields=exclude_computed_fields,
+                    exclude_unchanged=exclude_unchanged,
+                    round_trip=round_trip,
+                    warnings=warnings,
+                    fallback=fallback,
+                    serialize_as_any=serialize_as_any,
+                ),
+            )
+
+        def model_dump_json(  # pyright: ignore [reportRedeclaration]
+            self,
+            *,
+            indent: int | None = None,
+            include: "IncEx | None" = None,
+            exclude: "IncEx | None" = None,
+            context: Dict[str, Any] | None = None,  # Available since 2.7
+            by_alias: bool = False,
+            exclude_unset: bool = False,
+            exclude_defaults: bool = False,
+            exclude_none: bool = False,
+            exclude_computed_fields: bool = False,  # Available since 2.11
+            exclude_unchanged: bool = False,
+            round_trip: bool = False,
+            warnings: bool = True,
+            fallback: Callable[[Any], Any] | None = None,  # Available since 2.11
+            serialize_as_any: bool = False,  # Available since 2.7
+        ) -> str:
+            """
+            Generates a JSON representation of the model using Pydantic's `to_json`
+            method.
+
+            Extends normal pydantic method to also allow to use `exclude_unchanged`.
+            """
+
+            return super().model_dump_json(
+                **self._get_changed_export_includes(
+                    indent=indent,
+                    include=include,
+                    exclude=exclude,
+                    context=context,
+                    by_alias=by_alias,
+                    exclude_unset=exclude_unset,
+                    exclude_defaults=exclude_defaults,
+                    exclude_none=exclude_none,
+                    exclude_computed_fields=exclude_computed_fields,
+                    exclude_unchanged=exclude_unchanged,
+                    round_trip=round_trip,
+                    warnings=warnings,
+                    fallback=fallback,
+                    serialize_as_any=serialize_as_any,
+                ),
+            )
+    elif PYDANTIC_GE_V2_7:  # Version 2.7.0 < 2.10.0
         def model_dump(  # pyright: ignore [reportRedeclaration]
             self,
             *,
