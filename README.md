@@ -1,5 +1,8 @@
 # Pydantic change detection
 
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pydantic-changedetect?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/pydantic-changedetect)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pydantic-changedetect?period=monthly&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads%2Fmonth)](https://pepy.tech/projects/pydantic-changedetect)
+
 ## Installation
 
 Just use `pip install pydantic-changedetect` to install the library.
