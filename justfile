@@ -36,6 +36,10 @@ pyright *args: (uv "run" "pyright" "pydantic_changedetect" args)
 
 lint: ruff pyright
 
+qa: lint test
+
+qa-all: lint test-all
+
 release version: (uv "version" version)
     git add pyproject.toml
     git commit -m "release: 🔖 v$(uv version --short)" --no-verify
