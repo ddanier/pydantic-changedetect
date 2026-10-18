@@ -108,7 +108,7 @@ class ChangeDetectionMixin(pydantic.BaseModel):
             elif (
                 field_value
                 and is_pydantic_change_detect_annotation(
-                    model_field.annotation,
+                    model_field.annotation,  # pyright: ignore[reportArgumentType]
                 )
             ):
                 # Collect all possible values
@@ -153,7 +153,7 @@ class ChangeDetectionMixin(pydantic.BaseModel):
             elif (
                 field_value
                 and is_pydantic_change_detect_annotation(
-                    model_field.annotation,
+                    model_field.annotation,  # pyright: ignore[reportArgumentType]
                 )
             ):
                 # Collect all possible values
